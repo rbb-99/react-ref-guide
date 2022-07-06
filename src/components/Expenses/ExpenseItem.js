@@ -1,18 +1,21 @@
 import "./ExpenseItem.css";
 import ExpenseDate from "./ExpenseDate";
 import Card from "../UI/Card.js";
+import { useState } from "react";
 
 const ExpenseItem = (props) => {
-  let title = props.title;
+  //all such hooks must be called only inside of react components
+  //functions and not inside of nested functions (∃ an exception)
+  //useState must be provided with an initial default value
+  //it returns an array with 2 values, 1. value itself 2. updating function
+  const [title, setTitle] = useState(props.title);
+  //here, we use const because the updation is not by '='
 
   const clickHandler = () => {
-    title = "Updated!";
-    //here the title won't get updated because 
-    //react has already rendered the app, and 
-    //changes in such viariables or an event 
-    //occuring (a click here) does not trigger 
-    //the reavluation and rerendering of that component 
-    //ergo comes the concept of state
+    setTitle("Updated!");
+    //thus, only the component in which the state is registered is revaluated by react
+    //BUT not any other components; state is independent of its component instances 
+    //ie every instance of ExpenseItem has its own state
   };
 
   return (
