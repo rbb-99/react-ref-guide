@@ -1,7 +1,7 @@
 import "./NewExpenseForm.css";
 import { useState } from "react";
 
-const NewExpenseForm = () => {
+const NewExpenseForm = (props) => {
   const [enteredTitle, setEnteredTitle] = useState("");
   const [enteredAmount, setEnteredAmount] = useState("");
   const [enteredDate, setEnteredDate] = useState("");
@@ -25,12 +25,16 @@ const NewExpenseForm = () => {
       amount: enteredAmount,
       date: new Date(enteredDate),
     };
-    console.log(expenseData);
+    //props can be used to pass data from parent component to child component (expenses object passed to Expenses component)
+    //whereas for the other way around data transfer(child->parent: NewExpenseForm->NewExpense->App),
+    //we can have our child component, NewExpenseForm, have a prop, onSaveExpenseData, that listens to a function, saveExpenseDataHandler
+    //in this function we can pass the data from child as parameters, enteredExpenseData, and thus send to the parent
+    props.onSaveExpenseData(expenseData);
 
     //state helps in clearing the form values after submission along with value={entered...}
-    setEnteredTitle('');
-    setEnteredAmount('');
-    setEnteredDate('');
+    setEnteredTitle("");
+    setEnteredAmount("");
+    setEnteredDate("");
   };
 
   return (
@@ -38,7 +42,11 @@ const NewExpenseForm = () => {
       <div className="new-expense__controls">
         <div className="new-expense__control">
           <label>Title</label>
-          <input type="text" value={enteredTitle} onChange={titleChangeHandler} />
+          <input
+            type="text"
+            value={enteredTitle}
+            onChange={titleChangeHandler}
+          />
         </div>
 
         <div className="new-expense__control">
