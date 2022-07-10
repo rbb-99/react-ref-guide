@@ -25,13 +25,8 @@ const NewExpenseForm = (props) => {
       amount: enteredAmount,
       date: new Date(enteredDate),
     };
-    //props can be used to pass data from parent component to child component (expenses object passed to Expenses component)
-    //whereas for the other way around data transfer(child->parent: NewExpenseForm->NewExpense->App),
-    //we can have our child component, NewExpenseForm, have a prop, onSaveExpenseData, that listens to a function, saveExpenseDataHandler
-    //in this function we can pass the data from child as parameters, enteredExpenseData, and thus send to the parent
     props.onSaveExpenseData(expenseData);
 
-    //state helps in clearing the form values after submission along with value={entered...}
     setEnteredTitle("");
     setEnteredAmount("");
     setEnteredDate("");
@@ -73,6 +68,7 @@ const NewExpenseForm = (props) => {
       </div>
 
       <div className="new-expense__actions">
+        <button type="button" onClick={props.onCancel}>Cancel</button>
         <button type="submit">Add Expense</button>
       </div>
     </form>
