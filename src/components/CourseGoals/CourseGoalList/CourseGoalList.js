@@ -1,3 +1,4 @@
+import React from 'react';
 import CourseGoalItem from "../CourseGoalItem/CourseGoalItem";
 import "./CourseGoalList.css";
 
