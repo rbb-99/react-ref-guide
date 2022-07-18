@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Card from "../UI/Card";
 import classes from "./AddUser.module.css";
 import Button from "../UI/Button";
@@ -6,13 +6,17 @@ import ErrorModal from "../UI/ErrorModal";
 import Wrapper from "../Helpers/Wrapper";
 
 const AddUser = (props) => {
-  const [enteredUsername, setEnteredUsername] = useState("");
-  const [enteredAge, setEnteredAge] = useState("");
+  const nameInputRef = useRef();
+  const ageInputRef = useRef();
+
   const [error, setError] = useState(); //currently there's no error ie it is undefined so leave it blank
 
   const addUserHandler = (event) => {
     event.preventDefault();
-    if (enteredAge.trim().length === 0 || enteredUsername.trim().length === 0) {
+    const enteredName = nameInputRef.current.value;
+    const enteredAge = ageInputRef.current.value;
+
+    if (enteredAge.trim().length === 0 || enteredName.trim().length === 0) {
       setError({
         title: "Invalid input",
         message: "Please enter a valid name and age (non-empty values).",
@@ -26,17 +30,13 @@ const AddUser = (props) => {
       });
       return;
     }
-    props.onAddUser(enteredUsername, enteredAge);
-    setEnteredUsername("");
-    setEnteredAge("");
-  };
-
-  const usernameChangeHandler = (event) => {
-    setEnteredUsername(event.target.value);
-  };
-
-  const ageChangeHandler = (event) => {
-    setEnteredAge(event.target.value);
+    props.onAddUser(enteredName, enteredAge);
+    //use state itself to get back the reset form functionality
+    //let react manipulate DOM behind the scenes, but just for input
+    //we can consider the following method
+    nameInputRef.current.value = "";
+    ageInputRef.current.value = "";
+    //AGAIN, rarely use ref's to manipulate the DOM
   };
 
   const errorHandler = () => {
@@ -55,19 +55,10 @@ const AddUser = (props) => {
       <Card className={classes.input}>
         <form onSubmit={addUserHandler}>
           <label htmlFor="username">Username</label>
-          <input
-            value={enteredUsername}
-            type="text"
-            id="username"
-            onChange={usernameChangeHandler}
-          />
+          {/* now these inputs are not controlled components as their internal state is not controlled by us(via react) */}
+          <input type="text" id="username" ref={nameInputRef} />
           <label htmlFor="age">Age (Years)</label>
-          <input
-            value={enteredAge}
-            type="number"
-            id="age"
-            onChange={ageChangeHandler}
-          />
+          <input type="number" id="age" ref={ageInputRef} />
           <Button type="submit">Add User</Button>
         </form>
       </Card>

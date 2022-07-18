@@ -44,3 +44,6 @@ const ErrorModal = (props) => {
 };
 
 export default ErrorModal;
+
+//Portals are created to port a component to another place in the DOM (see index.html)
+//they provide a clearer way to visualize on the z-index avoiding nesting of components on the same level
