@@ -10,7 +10,6 @@ const MealItemForm = (props) => {
   const submitHandler = (event) => {
     event.preventDefault();
 
-    //the value will always be a string even if type is a number below
     const enteredAmount = amountInputRef.current.value;
     const enteredAmountNumber = +enteredAmount;
     if (
