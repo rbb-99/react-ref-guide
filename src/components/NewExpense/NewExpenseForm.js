@@ -5,7 +5,7 @@ const NewExpenseForm = (props) => {
   const [enteredTitle, setEnteredTitle] = useState("");
   const [enteredAmount, setEnteredAmount] = useState("");
   const [enteredDate, setEnteredDate] = useState("");
-
+  
   const titleChangeHandler = (event) => {
     setEnteredTitle(event.target.value);
   };
@@ -20,6 +20,10 @@ const NewExpenseForm = (props) => {
 
   const submitHandler = (event) => {
     event.preventDefault();
+    //even if title is required, it allows blank space
+    if(enteredTitle.trim().length === 0) {
+      return;
+    }
     const expenseData = {
       title: enteredTitle,
       amount: +enteredAmount,
@@ -38,6 +42,7 @@ const NewExpenseForm = (props) => {
         <div className="new-expense__control">
           <label>Title</label>
           <input
+            required 
             type="text"
             value={enteredTitle}
             onChange={titleChangeHandler}
@@ -47,6 +52,7 @@ const NewExpenseForm = (props) => {
         <div className="new-expense__control">
           <label>Amount</label>
           <input
+            required
             type="number"
             min="0.01"
             step="0.01"
@@ -58,6 +64,7 @@ const NewExpenseForm = (props) => {
         <div className="new-expense__control">
           <label>Date</label>
           <input
+            required
             type="date"
             min="2019-01-01"
             max="2022-12-31"
