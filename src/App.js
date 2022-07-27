@@ -1,33 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import MoviesList from "./components/MoviesList";
 import "./App.css";
-
-// when user land s on the page the content should be loaded. 
-// for this use useEffect hook because sending this http request 
-// is a side effect which ultimately changes our component's state;
-// having side effects in a function is also fine as long as you don't 
-// call this function as part pf your main component function (here, App)
-// because then there can be an infinite loop where you call this function,
-// it updates the state, the component function re-renders/is re-evaluated
-// and the component function is called again ... Hence, useEffect()
 
 function App() {
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // with the following we render it only once (initially)
-  useEffect(()=>{
-    fetchMoviesHandler()
-  }, [])
-  // now we want to add fetchMoviesHandler as a dependency 
-  // because any changes in it must be re-evaluated
-  // useEffect(()=>{
-  //   fetchMoviesHandler()
-  // }, [fetchMoviesHandler])
-  // but the above gets into an infinite loop, so we use callBack()
+/* The React useCallback Hook returns a memoized callback function.
+Think of memoization as caching a value so that it does not need to be recalculated.
+This allows us to isolate resource intensive functions so that they will not automatically run on every render.
+The useCallback Hook only runs when one of its dependencies update.This can improve performance.
+The useCallback and useMemo Hooks are similar. The main difference is that useMemo returns a memoized value 
+and useCallback returns a memoized function. You can learn more about useMemo in the useMemo chapter.
+One reason to use useCallback is to prevent a component from re-rendering unless its props have changed. */
 
-  const fetchMoviesHandler = async () => {
+  const fetchMoviesHandler = useCallback(async () => {
     setIsLoading(true);
     setError(null);
     try {
@@ -49,7 +37,11 @@ function App() {
       setError(error.message);
     }
     setIsLoading(false);
-  };
+  }, []); // here, we add external dependencies but there aren't any (setError, setMovies,... are handled internally)
+
+  useEffect(() => {
+    fetchMoviesHandler();
+  }, []);
 
   let content = <p>Found no movies.</p>;
 
