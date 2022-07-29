@@ -2,26 +2,17 @@ import { useState } from "react";
 
 const SimpleInput = () => {
   const [enteredName, setEnteredName] = useState("");
-  const [enteredNameIsValid, setEnteredNameIsValid] = useState(false); //ideally, this should be false at the beginning
   const [enteredNameTouched, setEnteredNameTouched] = useState(false);
 
-  //when the input is changing with every keystroke
+  const enteredNameIsValid = enteredName.trim() !== "";
+  const nameInputIsInvalid = !enteredNameIsValid && enteredNameTouched;
+
   const nameInputChangeHandler = (event) => {
     setEnteredName(event.target.value);
-
-    //as soon as the user types something set it to valid
-    if (event.target.value.trim() !== "") {
-      setEnteredNameIsValid(true);
-    }
   };
 
-  //when the input loses focus
   const nameInputBlurHandler = (event) => {
     setEnteredNameTouched(true);
-
-    if (enteredName.trim() === "") {
-      setEnteredNameIsValid(false);
-    }
   };
 
   const formSubmissionHandler = (event) => {
@@ -29,17 +20,14 @@ const SimpleInput = () => {
 
     setEnteredNameTouched(true);
 
-    if (enteredName.trim() === "") {
-      setEnteredNameIsValid(false);
+    if (!enteredNameIsValid) {
       return;
     }
-    setEnteredNameIsValid(true);
 
     console.log(enteredName);
     setEnteredName("");
+    setEnteredNameTouched(false);
   };
-
-  const nameInputIsInvalid = !enteredNameIsValid && enteredNameTouched;
 
   const nameInputClasses = !nameInputIsInvalid
     ? "form-control"
