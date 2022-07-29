@@ -5,8 +5,23 @@ const SimpleInput = () => {
   const [enteredNameIsValid, setEnteredNameIsValid] = useState(false); //ideally, this should be false at the beginning
   const [enteredNameTouched, setEnteredNameTouched] = useState(false);
 
+  //when the input is changing with every keystroke
   const nameInputChangeHandler = (event) => {
     setEnteredName(event.target.value);
+
+    //as soon as the user types something set it to valid
+    if (event.target.value.trim() !== "") {
+      setEnteredNameIsValid(true);
+    }
+  };
+
+  //when the input loses focus
+  const nameInputBlurHandler = (event) => {
+    setEnteredNameTouched(true);
+
+    if (enteredName.trim() === "") {
+      setEnteredNameIsValid(false);
+    }
   };
 
   const formSubmissionHandler = (event) => {
@@ -39,6 +54,7 @@ const SimpleInput = () => {
           id="name"
           onChange={nameInputChangeHandler}
           value={enteredName}
+          onBlur={nameInputBlurHandler}
         />
         {nameInputIsInvalid && (
           <p className="error-text">Name must not be empty.</p>
