@@ -5,14 +5,19 @@ import MealItem from "./MealItem/MealItem";
 
 const AvailableMeals = () => {
   const [meals, setMeals] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [httpError, setHttpError] = useState();
 
-  // function passed to useEffect should not return a promise, it may return a synchronous
-  // cleanup function which can be excecuted ie useEffect(async()=>{}) not allowed
   useEffect(() => {
     const fetchMeals = async () => {
       const response = await fetch(
         "https://react-http-ed4ad-default-rtdb.firebaseio.com/meals.json"
       );
+
+      if (!response.ok) {
+        throw new Error("Something went wrong.");
+      }
+
       const responseData = await response.json();
       const loadedMeals = [];
       for (const key in responseData) {
@@ -24,9 +29,40 @@ const AvailableMeals = () => {
         });
       }
       setMeals(loadedMeals);
+      setIsLoading(false);
     };
-    fetchMeals();
+
+    // this won't work because above function returns a promise and if it's an error, the promise is rejected
+    // to handler this we can await the fetchMeals(); below but it would return a promise to useEffecr which is not allowed
+    // to handle this we use the .catch on the promise returned
+    // try {
+    //   fetchMeals();
+    // } catch (error) {
+    //   setIsLoading(false);
+    //   setHttpError(error.message);
+    // }
+
+    fetchMeals().catch((error) => {
+      setIsLoading(false);
+      setHttpError(error.message);
+    });
   }, []);
+
+  if (isLoading) {
+    return (
+      <section className={classes.mealsLoading}>
+        <p>Loading...</p>
+      </section>
+    );
+  }
+
+  if (httpError) {
+    return (
+      <section className={classes.mealsError}>
+        <p>{httpError}</p>
+      </section>
+    );
+  }
 
   const mealsList = meals.map((meal) => (
     <MealItem
