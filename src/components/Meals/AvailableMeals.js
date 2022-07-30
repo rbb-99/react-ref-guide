@@ -32,16 +32,6 @@ const AvailableMeals = () => {
       setIsLoading(false);
     };
 
-    // this won't work because above function returns a promise and if it's an error, the promise is rejected
-    // to handler this we can await the fetchMeals(); below but it would return a promise to useEffecr which is not allowed
-    // to handle this we use the .catch on the promise returned
-    // try {
-    //   fetchMeals();
-    // } catch (error) {
-    //   setIsLoading(false);
-    //   setHttpError(error.message);
-    // }
-
     fetchMeals().catch((error) => {
       setIsLoading(false);
       setHttpError(error.message);
