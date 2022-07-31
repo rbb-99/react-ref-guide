@@ -1,39 +1,36 @@
-import { legacy_createStore } from "redux";
+import { createSlice, configureStore } from "@reduxjs/toolkit";
 
 const initialState = { counter: 0, showCounter: true };
 
-const counterReducer = (state = initialState, action) => {
-  if (action.type === "increment") {
-    return {
-      counter: state.counter + 1,
-      showCounter: state.showCounter,
-    };
-  }
+// if there are two unrelated states like authentication and counter,
+// maintain two different files with different slices
+const counterSlice = createSlice({
+  name: "counter",
+  initialState,
+  reducers: {
+    increment(state) {
+      state.counter++;
+      //here, we seem to be allowed to mutate states as redux toolkit creates an
+      //immutable state internally in short this is basically immutable at the end
+    },
 
-  if (action.type === "increase") {
-    return {
-      counter: state.counter + action.amount,
-      showCounter: state.showCounter,
-    };
-  }
+    decrement(state) {
+      state.counter--;
+    },
 
-  if (action.type === "decrement") {
-    return {
-      counter: state.counter - 1,
-      showCounter: state.showCounter,
-    };
-  }
+    increase(state, action) {
+      state.counter += action.payload;
+    },
 
-  if (action.type === "toggle") {
-    return {
-      showCounter: !state.showCounter,
-      counter: state.counter,
-    };
-  }
-  return state;
-};
+    toggle(state) {
+      state.showCounter = !state.showCounter;
+    },
+  },
+});
 
-const store = legacy_createStore(counterReducer);
+const store = configureStore({
+  reducer: counterSlice.reducer,
+});
 
-//now connect the App to store so those components can subscribe to the store
+export const counterActions = counterSlice.actions;
 export default store;
