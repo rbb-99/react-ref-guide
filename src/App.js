@@ -21,7 +21,7 @@ function App() {
 
     fetchTasks(
       {
-        url: "https://react-http-ed4ad-default-rtdb.firebaseio.com/tasks.json",
+        url: `${process.env.FIREBASE_URL}/tasks.json`,
       },
       transformTasks
     );
