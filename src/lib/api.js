@@ -1,4 +1,4 @@
-const FIREBASE_DOMAIN = "https://react-prep-c520c-default-rtdb.firebaseio.com/";
+// const FIREBASE_DOMAIN = ""; --> add your project realtime database domain url here
 
 export async function getAllQuotes() {
   const response = await fetch(`${FIREBASE_DOMAIN}/quotes.json`);
