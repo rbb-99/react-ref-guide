@@ -13,7 +13,7 @@ function App() {
     setError(null);
     try {
       const responsePromise = await fetch(
-        "https://react-http-ed4ad-default-rtdb.firebaseio.com/movies.json"
+        `${process.env.FIREBASE_URL}/movies.json`
       );
       if (!responsePromise.ok) {
         throw new Error("Something went wrong!");
@@ -45,7 +45,7 @@ function App() {
     setError(null);
     try {
       const response = await fetch(
-        "https://react-http-ed4ad-default-rtdb.firebaseio.com/movies.json",
+        `${process.env.FIREBASE_URL}/movies.json`,
         {
           method: "POST",
           body: JSON.stringify(movie),
