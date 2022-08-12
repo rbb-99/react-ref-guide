@@ -11,7 +11,7 @@ const AvailableMeals = () => {
   useEffect(() => {
     const fetchMeals = async () => {
       const response = await fetch(
-        "https://react-http-ed4ad-default-rtdb.firebaseio.com/meals.json"
+        `${process.env.FIREBASE_URL}/meals.json`
       );
 
       if (!response.ok) {

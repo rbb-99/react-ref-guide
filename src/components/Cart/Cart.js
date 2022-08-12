@@ -30,7 +30,7 @@ const Cart = (props) => {
     setIsSubmitting(true);
     // assuming here that response is correct to save time
     await fetch(
-      "https://react-http-ed4ad-default-rtdb.firebaseio.com/orders.json",
+      `${process.env.FIREBASE_URL}/orders.json`,
       {
         method: "POST",
         body: JSON.stringify({
