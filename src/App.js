@@ -15,10 +15,17 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         {!authCtx.isLoggedIn && <Route path="/auth" element={<AuthPage />} />}
-        <Route path="/profile">
-          {authCtx.isLoggedIn && <UserProfile />}{" "}
-          {!authCtx.isLoggedIn && <Navigate to="/auth" replace />}
-        </Route>
+        <Route
+          path="/profile"
+          element={
+            authCtx.isLoggedIn ? (
+              <UserProfile />
+            ) : (
+              <Navigate to="/auth" replace />
+            )
+          }
+        />
+
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Layout>
