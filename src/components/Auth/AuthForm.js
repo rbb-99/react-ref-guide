@@ -1,4 +1,5 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
+import AuthContext from "../../store/auth-context";
 
 import classes from "./AuthForm.module.css";
 
@@ -7,6 +8,8 @@ const AuthForm = () => {
   const emailInputRef = useRef();
   const passInputRef = useRef();
   const [isLoading, setIsLoading] = useState(false);
+
+  const authCtx = useContext(AuthContext);
 
   const switchAuthModeHandler = () => {
     setIsLogin((prevState) => !prevState);
@@ -42,7 +45,8 @@ const AuthForm = () => {
       });
       if (res.ok) {
         const data = await res.json();
-        console.log(data)
+        // console.log(data);
+        authCtx.login(data.idToken);
       } else {
         const errData = await res.json();
         console.log(errData);
