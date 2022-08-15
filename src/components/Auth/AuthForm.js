@@ -6,6 +6,7 @@ const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
   const emailInputRef = useRef();
   const passInputRef = useRef();
+  const [isLoading, setIsLoading] = useState(false);
 
   const switchAuthModeHandler = () => {
     setIsLogin((prevState) => !prevState);
@@ -18,6 +19,7 @@ const AuthForm = () => {
 
     //optional: add validation
 
+    setIsLoading(true);
     if (isLogin) {
     } else {
       //send a signup request
@@ -35,12 +37,18 @@ const AuthForm = () => {
           },
         }
       );
+      setIsLoading(false);
       if (res.ok) {
         //..
       } else {
         const errData = await res.json();
         //show an error modal
-        console.log(errData.error.message);
+        // console.log(errData);
+        let errMsg = "Authentication failed!";
+        if (errData && errData.error && errData.error.message) {
+          errMsg = errData.error.message;
+        }
+        alert(errMsg);
       }
     }
   };
@@ -58,7 +66,10 @@ const AuthForm = () => {
           <input ref={passInputRef} type="password" id="password" required />
         </div>
         <div className={classes.actions}>
-          <button>{isLogin ? "Login" : "Create Account"}</button>
+          {!isLoading && (
+            <button>{isLogin ? "Login" : "Create Account"}</button>
+          )}
+          {isLoading && <p>Loading...</p>}
           <button
             type="button"
             className={classes.toggle}
