@@ -1,4 +1,5 @@
 import { useRef, useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import AuthContext from "../../store/auth-context";
 import classes from "./ProfileForm.module.css";
 
@@ -6,6 +7,7 @@ const ProfileForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const authCtx = useContext(AuthContext);
   const newPassRef = useRef();
+  const navigate = useNavigate();
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -32,6 +34,7 @@ const ProfileForm = () => {
         const data = await res.json();
         console.log(data);
         // authCtx.login(data.idToken);
+        navigate("/");
       } else {
         const errData = await res.json();
         console.log(errData);
