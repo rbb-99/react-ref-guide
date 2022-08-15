@@ -19,38 +19,43 @@ const AuthForm = () => {
 
     //optional: add validation
 
-    setIsLoading(true);
+    let url;
     if (isLogin) {
+      url =
+        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAZf9M0_LmpCrKxRxNmWbrKjJ-FCBbcRj0";
     } else {
-      //send a signup request
-      const res = await fetch(
-        "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key= AIzaSyAZf9M0_LmpCrKxRxNmWbrKjJ-FCBbcRj0",
-        {
-          method: "POST",
-          body: JSON.stringify({
-            email: enteredEmail,
-            password: enteredPass,
-            returnSecureToken: true,
-          }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      setIsLoading(false);
+      url =
+        "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAZf9M0_LmpCrKxRxNmWbrKjJ-FCBbcRj0";
+    }
+    setIsLoading(true);
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify({
+          email: enteredEmail,
+          password: enteredPass,
+          returnSecureToken: true,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       if (res.ok) {
-        //..
+        const data = await res.json();
+        console.log(data)
       } else {
         const errData = await res.json();
-        //show an error modal
-        // console.log(errData);
-        let errMsg = "Authentication failed!";
+        console.log(errData);
+        let errMsg = "Authentication failed";
         if (errData && errData.error && errData.error.message) {
           errMsg = errData.error.message;
         }
-        alert(errMsg);
+        throw new Error(errMsg);
       }
+    } catch (error) {
+      alert(error);
     }
+    setIsLoading(false);
   };
 
   return (
