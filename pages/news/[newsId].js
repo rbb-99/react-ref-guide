@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 
 const NewsDetails = () => {
   const router = useRouter();
-  console.log(router.query.newsId);
+  // console.log(router.query.newsId);
 
   // send a request to backend API to fetch news item with newsId
 
